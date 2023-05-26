@@ -69,10 +69,13 @@
       <a-button type="primary" html-type="submit">Submit</a-button>
     </a-form-item>
   </a-form>
+
+  <test v-model="data.color"></test>
 </template>
 <script lang="ts" setup>
-import { computed, watch, ref, reactive } from 'vue';
+import { computed, watch, ref, reactive, provide } from 'vue';
 import cloneDeep from 'lodash/cloneDeep'
+import Test from './test.vue'
 const props = defineProps<{ modelValue: FormState }>()
 const emit = defineEmits<{
   (e: 'update:modelValue', modelValue: FormState): void,
@@ -138,8 +141,13 @@ const onCloneChange = () => {
   console.log('select onCloneChange cloneProps.color:', cloneProps.color);
 }
 
+// ------------------------------------------------------------------------------------
 
+const onUpdate = () => {
+  console.log('test update 校验', data.value.color);
+}
 
+provide('onUpdate', onUpdate)
 
 const onFinish = (values: any) => {
   console.log('Success:', values);

@@ -19,6 +19,7 @@ declare module '@vue/runtime-core' {
     ASelectOption: typeof import('ant-design-vue/es')['SelectOption']
     Basic: typeof import('./src/components/basic.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    Test: typeof import('./src/components/test.vue')['default']
     Wrap: typeof import('./src/components/wrap.vue')['default']
   }
 }
