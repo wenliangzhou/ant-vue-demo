@@ -16,9 +16,28 @@
     </a-form-item>
   </a-form> -->
   <!-- 第二种 通过emit新值到父级 -->
+  <a-form :model="data" name="basic" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }" autocomplete="off"
+    @finish="onFinish" @finishFailed="onFinishFailed">
+    <a-form-item label="绑定data.color" name="color"
+      :rules="[{ required: true, message: 'Please select favourite color!', trigger: 'change' }]">
+      <a-select :allowClear="true" v-model:value="data.color" @change="onDataChange"
+        placeholder="Please select favourite color">
+        <a-select-option value="red">Red</a-select-option>
+        <a-select-option value="green">Green</a-select-option>
+        <a-select-option value="blue">Blue</a-select-option>
+      </a-select>
+    </a-form-item>
+
+    <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
+      <a-button type="primary" html-type="submit">Submit</a-button>
+    </a-form-item>
+  </a-form>
+
+
+  <!-- props -->
   <a-form :model="props.modelValue" name="basic" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }" autocomplete="off"
     @finish="onFinish" @finishFailed="onFinishFailed">
-    <a-form-item label="color" name="color"
+    <a-form-item label="绑定props.color 通过emit更新" name="color"
       :rules="[{ required: true, message: 'Please select favourite color!', trigger: 'change' }]">
       <a-select :allowClear="true" v-model:value="color" @change="onChange" placeholder="Please select favourite color">
         <a-select-option value="red">Red</a-select-option>
@@ -33,7 +52,7 @@
   </a-form>
 </template>
 <script lang="ts" setup>
-import { computed, watch } from 'vue';
+import { computed, watch, ref } from 'vue';
 import cloneDeep from 'lodash/cloneDeep'
 const props = defineProps<{ modelValue: FormState }>()
 const emit = defineEmits<{
@@ -50,8 +69,11 @@ function setNewValue<T extends keyof FormState>(key: T, val: FormState[T]) {
   emit('update:modelValue', newValue)
 }
 
-const onChange = () =>{
-  console.log('select Change props.modelValue.color:',props.modelValue.color);
+const onDataChange = () => {
+  console.log('select Change data.color:', data.value.color);
+}
+const onChange = () => {
+  console.log('select Change props.modelValue.color:', props.modelValue.color);
 }
 
 watch(props, () => {
@@ -60,6 +82,15 @@ watch(props, () => {
   deep: true
 })
 
+const data = ref<FormState>({
+  color: undefined,
+});
+
+watch(data, () => {
+  console.log('监听到basic data', data.value.color);
+}, {
+  deep: true
+})
 // 第二种
 const color = computed({
   get() {
