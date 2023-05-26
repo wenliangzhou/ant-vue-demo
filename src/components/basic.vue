@@ -37,7 +37,7 @@
   <!-- props -->
   <a-form :model="props.modelValue" name="basic" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }" autocomplete="off"
     @finish="onFinish" @finishFailed="onFinishFailed">
-    <a-form-item label="绑定props.color 通过emit更新" name="color"
+    <a-form-item label="绑定计算属性props.color 通过emit更新" name="color"
       :rules="[{ required: true, message: 'Please select favourite color!', trigger: 'change' }]">
       <a-select :allowClear="true" v-model:value="color" @change="onChange" placeholder="Please select favourite color">
         <a-select-option value="red">Red</a-select-option>
@@ -50,9 +50,28 @@
       <a-button type="primary" html-type="submit">Submit</a-button>
     </a-form-item>
   </a-form>
+
+
+  <!-- cloneProps  -->
+  <a-form :model="cloneProps" name="basic" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }" autocomplete="off"
+    @finish="onFinish" @finishFailed="onFinishFailed">
+    <a-form-item label="绑定cloneProps 通过emit更新" name="color"
+      :rules="[{ required: true, message: 'Please select favourite color!', trigger: 'change' }]">
+      <a-select :allowClear="true" v-model:value="cloneProps.color" @change="onCloneChange"
+        placeholder="Please select favourite color">
+        <a-select-option value="red">Red</a-select-option>
+        <a-select-option value="green">Green</a-select-option>
+        <a-select-option value="blue">Blue</a-select-option>
+      </a-select>
+    </a-form-item>
+
+    <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
+      <a-button type="primary" html-type="submit">Submit</a-button>
+    </a-form-item>
+  </a-form>
 </template>
 <script lang="ts" setup>
-import { computed, watch, ref } from 'vue';
+import { computed, watch, ref, reactive } from 'vue';
 import cloneDeep from 'lodash/cloneDeep'
 const props = defineProps<{ modelValue: FormState }>()
 const emit = defineEmits<{
@@ -63,24 +82,14 @@ interface FormState {
   color: string | undefined;
 }
 
-function setNewValue<T extends keyof FormState>(key: T, val: FormState[T]) {
-  let newValue = cloneDeep(props.modelValue);
-  newValue[key] = val;
-  emit('update:modelValue', newValue)
-}
-
-const onDataChange = () => {
-  console.log('select Change data.color:', data.value.color);
-}
-const onChange = () => {
-  console.log('select Change props.modelValue.color:', props.modelValue.color);
-}
 
 watch(props, () => {
   console.log('监听到basic props', props.modelValue.color);
 }, {
   deep: true
 })
+
+// -----------------------------------------------------------------------------------
 
 const data = ref<FormState>({
   color: undefined,
@@ -91,7 +100,13 @@ watch(data, () => {
 }, {
   deep: true
 })
-// 第二种
+const onDataChange = () => {
+  console.log('select Change data.color:', data.value.color);
+}
+
+
+// -----------------------------------------------------------------------------------
+
 const color = computed({
   get() {
     return props.modelValue.color;
@@ -100,6 +115,32 @@ const color = computed({
     setNewValue('color', newValue);
   }
 })
+const onChange = () => {
+  console.log('select Change props.modelValue.color:', props.modelValue.color);
+}
+function setNewValue<T extends keyof FormState>(key: T, val: FormState[T]) {
+  let newValue = cloneDeep(props.modelValue);
+  newValue[key] = val;
+  emit('update:modelValue', newValue)
+}
+
+// -----------------------------------------------------------------------------------
+
+const cloneProps = reactive(cloneDeep(props.modelValue));
+
+watch(cloneProps, (value) => {
+  console.log('监听到cloneProps 变化， eimt', value.color);
+  emit('update:modelValue', value)
+}, {
+  deep: true
+})
+const onCloneChange = () => {
+  console.log('select onCloneChange cloneProps.color:', cloneProps.color);
+}
+
+
+
+
 const onFinish = (values: any) => {
   console.log('Success:', values);
 };
