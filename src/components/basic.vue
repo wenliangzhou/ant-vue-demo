@@ -1,6 +1,6 @@
 <template>
   <!-- 第一种 直接绑定props的属性 -->
-  <a-form :model="props.modelValue" name="basic" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }" autocomplete="off"
+  <!-- <a-form :model="props.modelValue" name="basic" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }" autocomplete="off"
     @finish="onFinish" @finishFailed="onFinishFailed">
     <a-form-item label="color" name="color"
       :rules="[{ required: true, message: 'Please select favourite color!', trigger: 'change' }]">
@@ -14,9 +14,9 @@
     <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
       <a-button type="primary" html-type="submit">Submit</a-button>
     </a-form-item>
-  </a-form>
+  </a-form> -->
   <!-- 第二种 通过emit新值到父级 -->
-  <!-- <a-form :model="props.modelValue" name="basic" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }" autocomplete="off"
+  <a-form :model="props.modelValue" name="basic" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }" autocomplete="off"
     @finish="onFinish" @finishFailed="onFinishFailed">
     <a-form-item label="color" name="color"
       :rules="[{ required: true, message: 'Please select favourite color!', trigger: 'change' }]">
@@ -30,7 +30,7 @@
     <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
       <a-button type="primary" html-type="submit">Submit</a-button>
     </a-form-item>
-  </a-form> -->
+  </a-form>
 </template>
 <script lang="ts" setup>
 import { computed, watch } from 'vue';
