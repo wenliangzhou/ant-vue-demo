@@ -148,6 +148,7 @@ const onUpdate = () => {
 }
 
 provide('onUpdate', onUpdate)
+provide('data',data.value)
 
 const onFinish = (values: any) => {
   console.log('Success:', values);

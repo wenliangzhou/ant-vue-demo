@@ -1,25 +1,30 @@
 <template>
   <ul @click="onClick">
-    <li data-index="red" :class="{active: props.modelValue === 'red'}">red</li>
-    <li data-index="green" :class="{active: props.modelValue === 'green'}">green</li>
-    <li data-index="blue" :class="{active: props.modelValue === 'blue'}">blue</li>
+    <li data-index="red" :class="{ active: props.modelValue === 'red' }">red</li>
+    <li data-index="green" :class="{ active: props.modelValue === 'green' }">green</li>
+    <li data-index="blue" :class="{ active: props.modelValue === 'blue' }">blue</li>
   </ul>
 </template>
 
 <script lang="ts" setup>
-import { inject  } from 'vue';
+import { inject, nextTick } from 'vue';
 
 const props = defineProps<{ modelValue: string | undefined }>()
 const emit = defineEmits<{
   (e: 'update:modelValue', modelValue: string | undefined): void,
 }>()
-const fn:any = inject('onUpdate')
-const onClick =(e:Event)=>{
+const fn: any = inject('onUpdate')
+const data: any = inject('data');
+const onClick = (e: Event) => {
   if (e.target) {
-    emit('update:modelValue',(e.target as HTMLInputElement).dataset.index)
-    console.log('fn',fn);
+    emit('update:modelValue', (e.target as HTMLInputElement).dataset.index)
+    console.log('fn', fn);
     fn()
-    console.log('test modelValue',props.modelValue);
+    console.log('test modelValue', props.modelValue);
+    console.log('inject data', data.color);
+    nextTick(() => {
+      console.log('nextTick test modelValue', props.modelValue);
+    })
   }
 }
 
