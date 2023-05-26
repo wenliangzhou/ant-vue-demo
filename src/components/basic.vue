@@ -20,7 +20,7 @@
     @finish="onFinish" @finishFailed="onFinishFailed">
     <a-form-item label="color" name="color"
       :rules="[{ required: true, message: 'Please select favourite color!', trigger: 'change' }]">
-      <a-select :allowClear="true" v-model:value="color" placeholder="Please select favourite color">
+      <a-select :allowClear="true" v-model:value="color" @change="onChange" placeholder="Please select favourite color">
         <a-select-option value="red">Red</a-select-option>
         <a-select-option value="green">Green</a-select-option>
         <a-select-option value="blue">Blue</a-select-option>
@@ -50,6 +50,9 @@ function setNewValue<T extends keyof FormState>(key: T, val: FormState[T]) {
   emit('update:modelValue', newValue)
 }
 
+const onChange = () =>{
+  console.log('select Change props.modelValue.color:',props.modelValue.color);
+}
 
 watch(props, () => {
   console.log('监听到basic props', props.modelValue.color);
